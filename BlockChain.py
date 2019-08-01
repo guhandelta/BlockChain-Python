@@ -35,12 +35,28 @@ def print_blockchain():
     for block in blockchain:
         print("Printing the Blockchain", block)    
 
+def verify_chain():
+    block_index = 0
+    is_valid = True
+    for block in blockchain:
+        if block_index == 0:
+            block_index += 1 # Security feature for checking the previous block for 1st node
+            continue #skip the following lines and proceed with the iteration
+        if block[0] == blockchain[block_index -1]:
+            is_valid = True
+        else:
+            is_valid = False
+            break
+        block_index += 1
+    return is_valid
+            
+
 # Get the 1st transaction and add it to the blockchain
 tx_amount = get_transaction_value()
 add_transaction(tx_amount)
 
 while True:
-    print("Make your choice \n1) Add a new Transaction \n2) Output the blockchain \nq) Quit" )
+    print("Make your choice \n1) Add a new Transaction \n2) Output the blockchain \nh) Manipulate Blockchain \nq) Quit" )
     user_choice = get_user_choice() 
 
     if user_choice == '1':
@@ -48,9 +64,16 @@ while True:
         add_transaction(tx_amount, get_last_blockchain_value())
     elif user_choice == '2':
         print_blockchain()
+    elif user_choice=='h':
+        if len(blockchain) >=1:
+            blockchain[0] = [2]
+        print("Cannot Manipulate a Block")
     elif user_choice=='q':
         break
     else:
         print("Invalid Entry")
+    if not verify_chain():
+        print("Invalid Entry")
+        break
 
 print("Done!")

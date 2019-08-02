@@ -1,4 +1,9 @@
-blockchain = []
+genesis_block = {
+            'previous_hash': '',
+            'index': 0,
+            'transactions': []
+    }
+blockchain = [genesis_block]
 pending_transactions = []
 owner = "anupunar"
 
@@ -30,7 +35,17 @@ def add_transaction( recipient, sender=owner, amount=1.0): #last_transaction=[1]
     pending_transactions.append(transaction)
 
 def mine_block():
-    pass
+    last_block = blockchain[-1]
+    hashed_block = ''
+    for keys in last_block:
+        value = last_block[keys] #Accessing a Dictionary element with the key
+        hashed_block += str(value)
+    block = {
+            'previous_hash': hashed_block,
+            'index': len(blockchain),
+            'transactions': pending_transactions
+    }
+    blockchain.append(block)
 
 #Function to recieve the Transaction value
 def get_transaction_value():
@@ -51,7 +66,7 @@ def print_blockchain():
  #Output the Blockchain list
     print('-' * 20, '\n The Blockchain: \n')
     for block in blockchain:
-        print("Printing the Blockchain", block)    
+        print("\nPrinting the Blockchain", block)    
     else:
         print('-' * 20)
 
@@ -74,7 +89,7 @@ def verify_chain():
 waiting_for_input = True
 
 while waiting_for_input:
-    print("Make your choice \n1) Add a new Transaction \n2) Output the blockchain \nh) Manipulate Blockchain \nq) Quit" )
+    print("Make your choice \n1) Add a new Transaction \n2) Mine a new Block \n3) Print the blockchain \nh) Manipulate Blockchain \nq) Quit" )
     user_choice = get_user_choice() 
 
     if user_choice == '1':
@@ -83,6 +98,8 @@ while waiting_for_input:
         add_transaction(recipient, amount=amount)# The named arg amount allows to skip using the sender arg, which is already populated
         print(pending_transactions) # Print the pending transactions, after the add_transaction call
     elif user_choice == '2':
+        mine_block()
+    elif user_choice == '3':
         print_blockchain()
     elif user_choice=='h':
         if len(blockchain) >=1:
@@ -93,10 +110,10 @@ while waiting_for_input:
         waiting_for_input = False
     else:
         print("Invalid Entry")
-    if not verify_chain():
-        print_blockchain()
-        print("Invalid Entry")
-        break
+    # if not verify_chain():
+    #     print_blockchain()
+    #     print("Invalid Entry")
+    #     break
 else:
     print("User Left")
 

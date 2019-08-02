@@ -36,7 +36,9 @@ def add_transaction( recipient, sender=owner, amount=1.0): #last_transaction=[1]
 
 def mine_block():
     last_block = blockchain[-1]
-    hashed_block = ''
+    hashed_block ='-'.join([str(last_block[key]) for key in last_block]) # This will provide all teh values from the dictionary
+    # The list comprehension is done to convert the list that comes as o/p, into something maningful
+    print(hashed_block)
     for keys in last_block:
         value = last_block[keys] #Accessing a Dictionary element with the key
         hashed_block += str(value)
